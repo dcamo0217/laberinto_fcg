@@ -35,7 +35,7 @@ public class PathManager : MonoBehaviour
                
                 Cell pathNode = grid.GetGridObject(x, y);
                 if (pathNode.isWalkable)
-                    pathNode.SetColor(Color.blue);
+                    //pathNode.SetColor(Color.blue);
                 pathNode.gCost = int.MaxValue;
                 pathNode.CalculateFCost();
                 pathNode.pastCell = null;
@@ -52,7 +52,7 @@ public class PathManager : MonoBehaviour
             if (currentNode == endCell)
             {
                 // Reached final node
-                Debug.Log("Reach the end");
+                //Debug.Log("Reach the end");
                 return CalculatePath(endCell);
             }
 
@@ -84,7 +84,7 @@ public class PathManager : MonoBehaviour
                 //PathfindingDebugStepVisual.Instance.TakeSnapshot(grid, currentNode, openList, closedList);
             }
         }
-        Debug.Log("Did not reach the end");
+        //Debug.Log("Did not reach the end");
         return null;
     }
 
@@ -102,8 +102,8 @@ public class PathManager : MonoBehaviour
 
         foreach(Cell c in path)
         {
-            c.SetColor(Color.green);
-            Debug.Log(c.ToString());
+            //c.SetColor(Color.green);
+            //Debug.Log(c.ToString());
         }
         return path;
     }

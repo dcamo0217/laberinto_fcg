@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class BoardManager : MonoBehaviour
 {
+    public PlayerMovement pm;
     public static BoardManager Instance;
     [SerializeField] private Cell CellPrefab;
     [SerializeField] private Player PlayerPrefab;
@@ -29,16 +30,18 @@ public class BoardManager : MonoBehaviour
         gridSize = PlayerPrefs.GetInt("nDropdownValue");
         grid = new Grid(10, 10, 1, CellPrefab);
 
-        player = Instantiate(HeroPrefab, new Vector2(0, (float)0.2), Quaternion.identity); 
+        player = Instantiate(HeroPrefab, new Vector2(0, (float)0), Quaternion.identity); 
         enemy = Instantiate(EnemyPrefab, new Vector2(gridSize-1, (float)(gridSize-1+0.2)), Quaternion.identity);
-
+        enemy.getBoard(this);
+        enemy.GetPlayer(player);
     }
 
-    public void CellMouseClick(int x, int y)
+    public void MoveEnemy(int x, int y)
     {
         List<Cell> path = PathManager.Instance.FindPath(grid, (int)enemy.GetPosition.x, (int)enemy.GetPosition.y, x, y);
-
         enemy.SetPath(path);
     }
+
+
 
 }

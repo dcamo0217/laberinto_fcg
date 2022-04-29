@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private Player p;
+    private BoardManager board;
     List<Cell> path;
     [SerializeField]
     private float moveSpeed = 2f;
@@ -20,7 +22,23 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
+        //Debug.Log(p);
+        
+        //board.MoveEnemy((int)p.GetPosition.x, (int)p.GetPosition.y);
+        DoMovement();
+
+        //Debug.Log("X: "+p.GetPosition.x);
+        //Debug.Log("Y: "+p.GetPosition.y);
+        //Debug.Log("Estoy en el update de Player");
+            
+        
+            
+        
+    }
+
+    public void GetPlayer(Player p)
+    {
+        this.p = p;
     }
 
     public void SetPath(List<Cell> path)
@@ -28,6 +46,11 @@ public class Player : MonoBehaviour
         //ResetPosition();
         waypointIndex = 0;
         this.path = path;
+    }
+
+    public void getBoard(BoardManager board)
+    {
+        this.board = board;
     }
 
     public void ResetPosition()
@@ -39,6 +62,7 @@ public class Player : MonoBehaviour
     {
         // If player didn't reach last waypoint it can move
         // If player reached last waypoint then it stops
+        Debug.Log("path: "+path);
         if (path == null)
             return;
 
@@ -60,4 +84,23 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    void OnEnable()
+    {
+        // Subscribe to onPlayerMovement event
+        PlayerMovement.onPlayerMovement += DoMovement;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe to onPlayerMovement event
+        PlayerMovement.onPlayerMovement -= DoMovement;
+    }
+
+    void DoMovement()
+    {
+        Move();
+        Debug.Log("Player moved");
+    }
+        // Do something
 }

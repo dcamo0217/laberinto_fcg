@@ -28,7 +28,7 @@ public class Cell : MonoBehaviour
     {
         this.obstacle = layerMask;
         gameObject.layer = (int)layerMask+3;
-        Debug.Log(gameObject.layer);
+        //Debug.Log(gameObject.layer);
     }
     public Vector2 Position => transform.position;
 
@@ -42,13 +42,10 @@ public class Cell : MonoBehaviour
         Inner.GetComponent<SpriteRenderer>().color = color;
     }
 
-    private void OnMouseDown()
+
+    public void OnColliderEnter2D(Collider2D collision)
     {
-        
-        if (Input.GetMouseButton(0))
-        {
-            grid.CellMouseClick(this);
-        } 
+        grid.MoveEnemy(this);
     }
 
     internal void CalculateFCost()
@@ -70,13 +67,13 @@ public class Cell : MonoBehaviour
     public void setStartGrid(bool value)
     {
         startGrid = value;
-        Debug.Log("startGrid: " + startGrid);
+        //Debug.Log("startGrid: " + startGrid);
     }
 
     public void setFinishGrid(bool value)
     {
         finishGrid = value;
-        Debug.Log("finishGrid: " + finishGrid);
+        //Debug.Log("finishGrid: " + finishGrid);
     }
 
     public bool getStartGrid()

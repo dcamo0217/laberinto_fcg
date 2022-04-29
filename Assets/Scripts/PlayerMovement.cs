@@ -19,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public System.DateTime startTime;
 
+    public delegate void OnPlayerMovement();
+
+    public static event OnPlayerMovement onPlayerMovement;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -59,6 +63,9 @@ public class PlayerMovement : MonoBehaviour
                 }
 
             }
+            if (onPlayerMovement != null)
+                onPlayerMovement();
+            
         }
         transform.position = Vector2.MoveTowards(transform.position,targetPosition,speed * Time.deltaTime); //MoveTowards is a function that moves the object towards a target position
 
@@ -66,10 +73,17 @@ public class PlayerMovement : MonoBehaviour
         {   
             //Obtener la colision
             Collider2D col = Physics2D.OverlapCircle(transform.position, 0.1f);
-            cell = col.GetComponent<Cell>();  
+            cell = col.GetComponent<Cell>();
+            cell.OnColliderEnter2D(col); 
+            Player aux = col.GetComponent<Player>();
+            Debug.Log("aux:"+aux);
+            if (aux != null)
+            {
+                Debug.Log("Colision");
+            } 
             if (cell.getFinishGrid()){
                 Debug.Log("Estoy en la ultima casilla");
-                Debug.Log ("Tiempo transcurrido: "+ts.Seconds.ToString ()+" segundos");
+                Debug.Log ("Tiempo transcurrido: "+ts.Seconds.ToString()+" segundos");
 
             }else{
                 if (cell.getStartGrid()){
@@ -85,8 +99,11 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+
+
     private void onCollisionEnter2D(Collision2D col)
     {
+        Debug.Log("Estoy en OnCollisionEnter2D");
         if (col.gameObject.tag.Equals("Enemy"))
         {
             Debug.Log("Me he chocado con un enemigo");
@@ -103,6 +120,7 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
+
 
     bool checkCollision
     {

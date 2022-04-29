@@ -89,10 +89,10 @@ public class Grid : ScriptableObject
         return N;
     }
 
-    public void CellMouseClick(Cell cell)
+    public void MoveEnemy(Cell cell)
     {
         //cell.SetText("Click on cell "+cell.x+ " "+ cell.y);
-        BoardManager.Instance.CellMouseClick(cell.x, cell.y);
+        BoardManager.Instance.MoveEnemy(cell.x, cell.y);
     }
 
     
