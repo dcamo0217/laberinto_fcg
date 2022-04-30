@@ -27,8 +27,8 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        gridSize = PlayerPrefs.GetInt("nDropdownValue");
-        grid = new Grid(10, 10, 1, CellPrefab);
+        gridSize = PlayerPrefs.GetInt("DropdownValue");
+        grid = new Grid(gridSize, gridSize, 1, CellPrefab);
 
         player = Instantiate(HeroPrefab, new Vector2(0, (float)0), Quaternion.identity); 
         enemy = Instantiate(EnemyPrefab, new Vector2(gridSize-1, (float)(gridSize-1+0.2)), Quaternion.identity);

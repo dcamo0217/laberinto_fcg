@@ -11,28 +11,25 @@ public class Grid : ScriptableObject
     private int cellSize;
     private Cell cellPrefab;
     private Cell[,] gridArray;
-    private int obstacles;
+    private float obstacles;
     private List<Cell> gridsObtacles = new List<Cell>();
     public LayerMask obstacle;
-    private int width;
-    private int height;
     private int N;
 
 
 
     public Grid(int width, int height, int cellSize, Cell cellPrefab)
     {
-        
-        this.width = width;
-        this.height = height;
         this.cellSize = cellSize;
         this.cellPrefab = cellPrefab;
-        N = PlayerPrefs.GetInt("nDropdownValue");
-        obstacles = PlayerPrefs.GetInt("mDropdownValue");
-        generateBoard();
+        N = PlayerPrefs.GetInt("DropdownValue");
+        //obstacles = PlayerPrefs.GetInt("mDropdownValue");
+        obstacles = (int)Math.Round((N*N) * 0.3);
+        Debug.Log("Numero de obstaculos: "+obstacles);
+        generateBoard(N,N);
     }
 
-    private void generateBoard()
+    private void generateBoard(int width, int height)
     {
         Cell cell;
         gridArray = new Cell[width, height];
@@ -57,7 +54,8 @@ public class Grid : ScriptableObject
 
         var center = new Vector2((float)height / 2 - 0.5f, (float)width / 2 - 0.5f);
 
-        Camera.main.transform.position = new Vector3(center.x, center.y, -5);
+        Camera.main.orthographicSize = (height + width) / 3.5f;
+        Camera.main.transform.position = new Vector3(center.x, center.y, -10);
 
         for (int i = 0; i < obstacles; i++){
             int x = Random.Range(0, width);

@@ -62,7 +62,6 @@ public class Player : MonoBehaviour
     {
         // If player didn't reach last waypoint it can move
         // If player reached last waypoint then it stops
-        Debug.Log("path: "+path);
         if (path == null)
             return;
 
