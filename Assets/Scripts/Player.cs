@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // ref: https://drive.google.com/file/d/1WiF2LwM-6WvEnas9vw32YrYPly9K0Qrv/view
 
 
 public class Player : MonoBehaviour
 {
+    public Cell cell;
     private Player p;
     private BoardManager board;
     List<Cell> path;
@@ -22,17 +24,20 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(p);
+        Move();
         
-        //board.MoveEnemy((int)p.GetPosition.x, (int)p.GetPosition.y);
-        DoMovement();
-
-        //Debug.Log("X: "+p.GetPosition.x);
-        //Debug.Log("Y: "+p.GetPosition.y);
-        //Debug.Log("Estoy en el update de Player");
+        if (Physics2D.OverlapCircle(transform.position, 0.1f))
+        {   
+            //Obtener la colision
+            Collider2D col = Physics2D.OverlapCircle(transform.position, 0.1f);
+            cell = col.GetComponent<Cell>();
+            Debug.Log(col.gameObject.tag);
+            if (col.gameObject.tag.Equals("Hero"))
+            {
+                SceneManager.LoadScene("EndScene");
+            }
             
-        
-            
+        }
         
     }
 
@@ -45,6 +50,7 @@ public class Player : MonoBehaviour
     {
         //ResetPosition();
         waypointIndex = 0;
+        path.RemoveAt(0);
         this.path = path;
     }
 
@@ -87,19 +93,13 @@ public class Player : MonoBehaviour
     void OnEnable()
     {
         // Subscribe to onPlayerMovement event
-        PlayerMovement.onPlayerMovement += DoMovement;
+        PlayerMovement.onPlayerMovement += Move;
     }
 
     void OnDisable()
     {
         // Unsubscribe to onPlayerMovement event
-        PlayerMovement.onPlayerMovement -= DoMovement;
+        PlayerMovement.onPlayerMovement -= Move;
     }
 
-    void DoMovement()
-    {
-        Move();
-        Debug.Log("Player moved");
-    }
-        // Do something
 }

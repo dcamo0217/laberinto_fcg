@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Cell : MonoBehaviour
 {
@@ -16,13 +17,18 @@ public class Cell : MonoBehaviour
     private bool startGrid = false;
     private bool finishGrid = false;
     public LayerMask obstacle;
+    
+    public LayerMask Default;
 
     public void Init(Grid grid, int x, int y, bool isWalkable)
     {
         this.grid = grid;
         this.x = x;
         this.y = y;
-        this.isWalkable = isWalkable;
+        gameObject.layer = Default.value-1;
+        //Debug.Log(gameObject.layer);
+        
+        //this.isWalkable = isWalkable;
     }
     public void setLayerMask(LayerMask layerMask)
     {
@@ -32,21 +38,23 @@ public class Cell : MonoBehaviour
     }
     public Vector2 Position => transform.position;
 
-    public void SetText(string text)
-    {
-        textMeshPro.text = text;
-    }
-
     public void SetColor(Color color)
     {
         Inner.GetComponent<SpriteRenderer>().color = color;
     }
 
+    //Update
+   
+
+    //get x and y position of the cell
+    
 
     public void OnColliderEnter2D(Collider2D collision)
     {
         grid.MoveEnemy(this);
     }
+
+   
 
     internal void CalculateFCost()
     {
@@ -56,7 +64,6 @@ public class Cell : MonoBehaviour
     internal void SetWalkable(bool v)
     {
         isWalkable = v;
-        SetColor(Color.black);
     }
 
     public override string ToString()

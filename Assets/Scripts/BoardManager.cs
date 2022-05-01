@@ -2,23 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BoardManager : MonoBehaviour
 {
     public PlayerMovement pm;
     public static BoardManager Instance;
     [SerializeField] private Cell CellPrefab;
-    [SerializeField] private Player PlayerPrefab;
 
-    [SerializeField] private Player HeroPrefab;
+    [SerializeField] private PlayerMovement HeroPrefab;
 
     [SerializeField] private Player EnemyPrefab;
     private Grid grid;
-    private Player player;
+    private PlayerMovement player;
     private Player enemy;
     [SerializeField]
-    private float moveSpeed = 2f;
     private int gridSize;
+
+    private float timeStart = 0;
+
+    private Text timeTextBox;
+
+    private Text levelTextBox;
+    private List<Cell> path;
+
+    private List<Player> enemys = new List<Player>();
+
+    private static int numEnemys=0;
+
+    private WinMenuManager winMenuManager = new WinMenuManager();
+
+    private EndManager endManager = new EndManager();
+    private float sumTime=0;
+
+    private string NumNiveles = "numNiveles";
+    private string SumTime = "sumTime";
+
+    private int isEnd = 0;
+
+    private string IsEndBM = "isEndBM";
+
 
     private void Awake()
     {
@@ -27,20 +51,70 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetInt(NumNiveles, numEnemys);
+        PlayerPrefs.SetFloat(SumTime, sumTime);
+        if(numEnemys>3){
+            SceneManager.LoadScene("WinScene");
+        }
+        Debug.Log(PlayerPrefs.GetInt("EndBoolFinish"));
+        
+        timeTextBox= GameObject.Find("timer").GetComponent<Text>();
+        levelTextBox= GameObject.Find("level").GetComponent<Text>();
         gridSize = PlayerPrefs.GetInt("DropdownValue");
         grid = new Grid(gridSize, gridSize, 1, CellPrefab);
+        player = Instantiate(HeroPrefab, new Vector2(0, (float)0), Quaternion.identity);
+        numEnemys++;
+        for (int i = 0; i < numEnemys; i++)
+        {
+            List<Cell> obs = grid.GetGridsObtacles();
+            int randomPositionX = Random.Range(gridSize/2, gridSize);
+            int randomPositionY = Random.Range(gridSize/2, gridSize);
+            //bool aux = true;
+            enemy = Instantiate(EnemyPrefab, new Vector2(randomPositionX-1, (float)(randomPositionY-1+0.2)), Quaternion.identity);
+            enemy.getBoard(this);
+            enemys.Add(enemy);
+            
+        }
+        timeTextBox.text = timeStart.ToString();
+        levelTextBox.text = "Nivel: 1";
+        
+         
+        
+        
+        
+    }
 
-        player = Instantiate(HeroPrefab, new Vector2(0, (float)0), Quaternion.identity); 
-        enemy = Instantiate(EnemyPrefab, new Vector2(gridSize-1, (float)(gridSize-1+0.2)), Quaternion.identity);
-        enemy.getBoard(this);
-        enemy.GetPlayer(player);
+    void Update()
+    {
+        timeStart += Time.deltaTime;
+        timeTextBox.text="Tiempo: "+Mathf.Round(timeStart).ToString()+" seg";
+        levelTextBox.text="Nivel "+numEnemys;
+        sumTime+=Mathf.Round(timeStart);
+    }
+
+    public int getNumEnemys(){
+        return numEnemys;
+    }
+    public float getSumTime(){
+        return sumTime;
     }
 
     public void MoveEnemy(int x, int y)
     {
-        List<Cell> path = PathManager.Instance.FindPath(grid, (int)enemy.GetPosition.x, (int)enemy.GetPosition.y, x, y);
-        enemy.SetPath(path);
+        foreach (var enemy in enemys)
+        {
+            List<Cell> path = PathManager.Instance.FindPath(grid, (int)enemy.GetPosition.x, (int)enemy.GetPosition.y, x, y);
+            enemy.SetPath(path);
+        }
+        
     }
+
+    // set path
+    public Grid SetGrid()
+    {
+       return grid;
+    }
+    
 
 
 

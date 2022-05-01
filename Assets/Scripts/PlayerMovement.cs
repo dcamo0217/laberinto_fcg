@@ -31,12 +31,12 @@ public class PlayerMovement : MonoBehaviour
         startTime = System.DateTime.UtcNow;
     }
     
-    void Update (){
+    void Move()
+    {
         System.TimeSpan ts = System.DateTime.UtcNow - startTime;
         anim.SetInteger("Direction", 4);
         Vector2 axisDirection = new Vector2(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
         anim.SetInteger("Direction", (int)direction);
-        Debug.Log(direction);
         if(axisDirection != Vector2.zero && targetPosition == (Vector2)transform.position){
             if  (Mathf.Abs(axisDirection.x) > Mathf.Abs(axisDirection.y)){
                 if(axisDirection.x > 0){
@@ -74,52 +74,21 @@ public class PlayerMovement : MonoBehaviour
             //Obtener la colision
             Collider2D col = Physics2D.OverlapCircle(transform.position, 0.1f);
             cell = col.GetComponent<Cell>();
-            cell.OnColliderEnter2D(col); 
-            Player aux = col.GetComponent<Player>();
-            Debug.Log("aux:"+aux);
-            if (aux != null)
-            {
-                Debug.Log("Colision");
-            } 
-            if (cell.getFinishGrid()){
-                Debug.Log("Estoy en la ultima casilla");
-                Debug.Log ("Tiempo transcurrido: "+ts.Seconds.ToString()+" segundos");
-
-            }else{
-                if (cell.getStartGrid()){
-                    Debug.Log("Estoy en la primera casilla");
-                }else{
-                    if (cell.getStartGrid() == false && cell.getFinishGrid() == false){
-                        Debug.Log("Estoy en una casilla normal");
-                    }
-                }
-            }
-        }
-
-
-    }
-
-
-
-    private void onCollisionEnter2D(Collision2D col)
-    {
-        Debug.Log("Estoy en OnCollisionEnter2D");
-        if (col.gameObject.tag.Equals("Enemy"))
-        {
-            Debug.Log("Me he chocado con un enemigo");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+            cell.OnColliderEnter2D(col);
             
-    }
+            if (cell.getFinishGrid()){
+                SceneManager.LoadScene("GameScene");
+    
+                
+            }
 
-    private void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.tag.Equals("Enemy"))
-        {
-            Debug.Log("Me he chocado con un enemigo");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
+
+    void Update (){
+        Invoke("Move", 2f);
+    }
+
 
 
     bool checkCollision

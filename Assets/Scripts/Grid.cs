@@ -9,23 +9,28 @@ public class Grid : ScriptableObject
 {
     
     private int cellSize;
+
+    private BoardManager board = new BoardManager();
     private Cell cellPrefab;
     private Cell[,] gridArray;
     private float obstacles;
     private List<Cell> gridsObtacles = new List<Cell>();
     public LayerMask obstacle;
+
+    public LayerMask walkable;
     private int N;
+    private List<Cell> path;
 
 
 
     public Grid(int width, int height, int cellSize, Cell cellPrefab)
     {
+        this.walkable = LayerMask.NameToLayer("Default");
         this.cellSize = cellSize;
         this.cellPrefab = cellPrefab;
         N = PlayerPrefs.GetInt("DropdownValue");
-        //obstacles = PlayerPrefs.GetInt("mDropdownValue");
         obstacles = (int)Math.Round((N*N) * 0.3);
-        Debug.Log("Numero de obstaculos: "+obstacles);
+        
         generateBoard(N,N);
     }
 
@@ -57,6 +62,7 @@ public class Grid : ScriptableObject
         Camera.main.orthographicSize = (height + width) / 3.5f;
         Camera.main.transform.position = new Vector3(center.x, center.y, -10);
 
+        
         for (int i = 0; i < obstacles; i++){
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
@@ -65,18 +71,35 @@ public class Grid : ScriptableObject
             if (gridsObtacles.Contains(gridArray[x, y])){
                 i--;
             }else{
+
                 if (gridArray[x, y].getStartGrid() || gridArray[x, y].getFinishGrid()){
-                
+                    
                 }else{
-                gridArray[x, y].setLayerMask(obstacle);
-                gridArray[x,y].SetWalkable(false);
-                gridArray[x, y].SetColor(Color.black);
-                gridsObtacles.Add(gridArray[x, y]);
+                    gridArray[x,y].SetWalkable(false);
+                    path = PathManager.Instance.FindPath(this, (int)this.GetGridObject(0,0).x, (int)this.GetGridObject(0,0).y, this.GetGridObject(N-1,N-1).x, this.GetGridObject(N-1,N-1).y);
+                    if (path==null)
+                    {
+                        gridArray[x,y].SetWalkable(true);
+                        i--;
+                    }else{
+                        gridArray[x, y].setLayerMask(obstacle);
+                        gridArray[x, y].SetColor(Color.black);
+                        gridsObtacles.Add(gridArray[x, y]);
+                    }       
                 }
             }
-        }
-    }
 
+        }
+        
+
+        
+    }
+    
+    public List<Cell> GetGridsObtacles()
+    {
+        return gridsObtacles;
+    }
+    
     public int GetHeight()
     {
         return N;
