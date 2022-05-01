@@ -20,7 +20,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField]
     private int gridSize;
 
-    private float timeStart = 0;
+    private static float timeStart = 0;
 
     private Text timeTextBox;
 
@@ -34,7 +34,7 @@ public class BoardManager : MonoBehaviour
     private WinMenuManager winMenuManager = new WinMenuManager();
 
     private EndManager endManager = new EndManager();
-    private float sumTime=0;
+    private static float sumTime=0;
 
     private string NumNiveles = "numNiveles";
     private string SumTime = "sumTime";
@@ -52,11 +52,14 @@ public class BoardManager : MonoBehaviour
     private void Start()
     {
         PlayerPrefs.SetInt(NumNiveles, numEnemys);
-        PlayerPrefs.SetFloat(SumTime, sumTime);
+        
         if(numEnemys>3){
+            numEnemys=0;
+            timeStart=0;
             SceneManager.LoadScene("WinScene");
+            PlayerPrefs.SetFloat(SumTime, sumTime);
+            
         }
-        Debug.Log(PlayerPrefs.GetInt("EndBoolFinish"));
         
         timeTextBox= GameObject.Find("timer").GetComponent<Text>();
         levelTextBox= GameObject.Find("level").GetComponent<Text>();
@@ -78,10 +81,28 @@ public class BoardManager : MonoBehaviour
         timeTextBox.text = timeStart.ToString();
         levelTextBox.text = "Nivel: 1";
         
+        sumTime+=Mathf.Round(timeStart);
+        
+        
+        
          
         
         
         
+    }
+
+    public int GetNumEnemys()
+    {
+        return numEnemys;
+    }
+
+    public void ResetTotalTime()
+    {
+        sumTime = 0;
+        timeStart = 0;
+    }
+    public void ResetNumEnemys(){
+        numEnemys=0;
     }
 
     void Update()
@@ -89,12 +110,11 @@ public class BoardManager : MonoBehaviour
         timeStart += Time.deltaTime;
         timeTextBox.text="Tiempo: "+Mathf.Round(timeStart).ToString()+" seg";
         levelTextBox.text="Nivel "+numEnemys;
-        sumTime+=Mathf.Round(timeStart);
+        
+        
     }
 
-    public int getNumEnemys(){
-        return numEnemys;
-    }
+    
     public float getSumTime(){
         return sumTime;
     }

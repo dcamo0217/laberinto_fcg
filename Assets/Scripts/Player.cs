@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 {
     public Cell cell;
     private Player p;
-    private BoardManager board;
+    private BoardManager board = new BoardManager();
     List<Cell> path;
     [SerializeField]
     private float moveSpeed = 2f;
@@ -31,9 +31,10 @@ public class Player : MonoBehaviour
             //Obtener la colision
             Collider2D col = Physics2D.OverlapCircle(transform.position, 0.1f);
             cell = col.GetComponent<Cell>();
-            Debug.Log(col.gameObject.tag);
             if (col.gameObject.tag.Equals("Hero"))
             {
+                board.ResetTotalTime();
+                board.ResetNumEnemys();
                 SceneManager.LoadScene("EndScene");
             }
             

@@ -19,13 +19,15 @@ public class WinMenuManager : MonoBehaviour
 
     void Update()
     {
-        int a = PlayerPrefs.GetInt("sumTime");
-        totalTimeText.text = "Tiempo total: " + a;
+        float a = PlayerPrefs.GetFloat("sumTime");
+        totalTimeText.text = "Tiempo total: " + a + " seg";
     }
     public void onClick()
     {
        isEnd=1;
        SceneManager.LoadScene("StartScene");
+       board.ResetNumEnemys();
+       board.ResetTotalTime();
        PlayerPrefs.GetInt(BoolFinish, isEnd);
        
     }
