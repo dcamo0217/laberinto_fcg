@@ -55,7 +55,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   player: {fileID: 2036229278737631089}
-  speed: 5
+  speed: 3
 --- !u!212 &4994830896681640040
 SpriteRenderer:
   m_ObjectHideFlags: 0

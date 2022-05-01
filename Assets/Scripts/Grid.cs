@@ -49,9 +49,11 @@ public class Grid : ScriptableObject
                 cell.SetColor(Color.red);
                 if (i == 0 && j == 0){
                     cell.setStartGrid(true);
+                    cell.SetColor(Color.green);
                 }
                 if (i == width - 1 && j == height - 1){
                     cell.setFinishGrid(true);
+                    cell.SetColor(Color.green);
                 }
                 gridArray[i, j] = cell;
             }
