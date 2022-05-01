@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cell: {fileID: 4055601266444059904, guid: 874d85ce717e88d4088eee6b75d09bfe, type: 3}
-  moveSpeed: 2
+  moveSpeed: 1.5
 --- !u!95 &-8544877401464897137
 Animator:
   serializedVersion: 3

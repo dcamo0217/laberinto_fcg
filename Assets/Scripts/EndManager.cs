@@ -29,9 +29,7 @@ public class EndManager : MonoBehaviour
     {
         isEnd = 1;
         SceneManager.LoadScene("StartScene");
-        PlayerPrefs.SetInt(BoolFinish, isEnd);
-        
-       
+        PlayerPrefs.SetInt(BoolFinish, isEnd);  
     }
 
     

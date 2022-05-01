@@ -29,7 +29,7 @@ public class Grid : ScriptableObject
         this.cellSize = cellSize;
         this.cellPrefab = cellPrefab;
         N = PlayerPrefs.GetInt("DropdownValue");
-        obstacles = (int)Math.Round((N*N) * 0.3);
+        obstacles = (int)Math.Round((N*N) * 0.2);
         
         generateBoard(N,N);
     }

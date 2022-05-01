@@ -26,10 +26,9 @@ public class WinMenuManager : MonoBehaviour
     {
        isEnd=1;
        SceneManager.LoadScene("StartScene");
-       board.ResetNumEnemys();
-       board.ResetTotalTime();
+       //board.ResetNumEnemys();
+       //board.ResetTotalTime();
        PlayerPrefs.GetInt(BoolFinish, isEnd);
-       
     }
 
     

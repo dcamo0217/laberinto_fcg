@@ -58,7 +58,6 @@ public class BoardManager : MonoBehaviour
             timeStart=0;
             SceneManager.LoadScene("WinScene");
             PlayerPrefs.SetFloat(SumTime, sumTime);
-            
         }
         
         timeTextBox= GameObject.Find("timer").GetComponent<Text>();
